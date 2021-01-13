@@ -1,0 +1,61 @@
+.center{
+    position: center;
+}
+
+.content-section {
+    margin: 1em;
+}
+
+.custom-card{
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+    transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+    padding: 14px 80px 18px 36px;
+    cursor: pointer;
+}
+
+.custom-card:hover{
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+.img-preview{
+    width: 200px;
+    height: 200px;
+    margin-bottom: 1em;
+}
+
+.img-detail{
+    max-width: 350px;
+}
+
+.text-preview {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.title-preview {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.text-input {
+    overflow-wrap: break-word;
+}
+
+.date{
+    text-align: right;
+    vertical-align: bottom;
+    color: #808080;
+}
+
+.justify {
+    text-align: justify;
+}
