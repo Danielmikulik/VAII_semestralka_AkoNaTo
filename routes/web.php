@@ -30,3 +30,5 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::resource('guide', App\Http\Controllers\GuidesController::class);
 Route::get('guide/{guide}/delete', [\App\Http\Controllers\GuidesController::class, 'destroy'])->name('guide.delete');
+
+Route::resource('guideStep', App\Http\Controllers\GuideStepsController::class);

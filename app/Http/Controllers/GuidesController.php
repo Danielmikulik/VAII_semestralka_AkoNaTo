@@ -16,7 +16,7 @@ class GuidesController extends Controller
      */
     public function index()
     {
-        $guides = Guide::paginate(15);
+        $guides = Guide::paginate(5);
 
         return view('guide.index', [
             'guides' => $guides
@@ -45,7 +45,8 @@ class GuidesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required'
+            'title' => 'required',
+            'description' => 'required'
         ]);
 
         if ($request->hasFile('image')) {
@@ -111,7 +112,8 @@ class GuidesController extends Controller
     public function update(Request $request, Guide $guide)
     {
         $request->validate([
-            'title' => 'required'
+            'title' => 'required',
+            'description' => 'required'
         ]);
 
         if ($request->hasFile('image')) {
