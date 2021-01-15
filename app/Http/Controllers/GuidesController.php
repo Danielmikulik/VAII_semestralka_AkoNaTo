@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guide;
+use App\Models\GuideStep;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class GuidesController extends Controller
 {
@@ -49,6 +49,12 @@ class GuidesController extends Controller
             'description' => 'required'
         ]);
 
+        $request->validate([
+            'addstep.*.step' => 'required',
+            'addstep.*.procedure' => 'required',
+            'addstep.*.image_step' => 'mimes:jpeg,jpg,png|max:5000'
+        ]);
+
         if ($request->hasFile('image')) {
             $request->validate([
                 'image' => 'mimes:jpeg,jpg,png|max:5000'
@@ -70,6 +76,41 @@ class GuidesController extends Controller
             ]);
         }
         $guide->save();
+
+        $id = Guide::max('id');
+        $i = 0;
+        if ($request->has('addstep')) {
+            foreach ($request->addstep as $key => $value) {
+
+                //if ($request->hasFile('addstep['.$i.'][image_step]')) {
+                if ($value['image_step'] != null) {
+                    /*$request->validate([
+                        'addstep.*.image_step' => 'mimes:jpeg,jpg,png|max:5000'
+                    ]);*/
+
+                    //$request->file('addstep' . $i . 'image_step')->store('guide_steps', 'public');
+                    $value['image_step']->store('guide_steps', 'public');
+
+                    $guideStep = new GuideStep([
+                        'step' => $value['step'],
+                        'procedure' => $value['procedure'],
+                        'image_path' => $value['image_step']->hashName(),
+                        'guide_id' => $id,
+                    ]);
+                } else {
+                    $guideStep = new GuideStep([
+                        //'step' => $request->get('addstep[' . $i . '][step]'),
+                        'step' => $value['step'],
+                        //'procedure' => $request->get('addstep[' . $i . '][procedure]'),
+                        'procedure' => $value['procedure'],
+                        'guide_id' => $id,
+                    ]);
+                }
+                //GuideStep::create($value[$i]);
+                $guideStep->save();
+                $i++;
+            }
+        }
         //dd($request->all());
         return redirect()->route('guide.index');
     }

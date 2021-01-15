@@ -30,7 +30,10 @@
                         </div>
                     </a>
                 @endforeach
-
+                <br>
+                <div class="d-flex justify-content-center">
+                    {!! $guides->links() !!}
+                </div>
             </div>
         </section>
     </div>

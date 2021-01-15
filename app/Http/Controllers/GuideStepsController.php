@@ -30,12 +30,13 @@ class GuideStepsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse|void
      */
-    public function store(Request $request)
+    public function store(Request $request, int $id)
     {
-        foreach ($request->addmore as $key => $value) {
+        foreach ($request->addstep as $key => $value) {
 
             $value->validate([
                 'step' => 'required',
@@ -47,24 +48,25 @@ class GuideStepsController extends Controller
                     'image' => 'mimes:jpeg,jpg,png|max:5000'
                 ]);
 
-                $value->file('image')->store('guide steps', 'public');
+                $value->file('image')->store('guide_steps', 'public');
 
                 $guideStep = new GuideStep([
                     'step' => $value->get('step'),
                     'procedure' => $value->get('procedure'),
                     'image_path' => $value->file('image')->hashName(),
-                    //'user_id' => Auth::id(),
+                    'user_id' => $id,
                 ]);
             } else {
                 $guideStep = new GuideStep([
                     'step' => $value->get('step'),
                     'procedure' => $value->get('procedure'),
-                    //'guide_id' => Auth::id(),
+                    'guide_id' => $id,
                 ]);
             }
             GuideStep::create($value);
             $guideStep->save();
         }
+        return redirect()->route('guide.index');
     }
 
     /**

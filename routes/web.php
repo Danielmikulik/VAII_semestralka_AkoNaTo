@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GuidesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,6 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::resource('guide', App\Http\Controllers\GuidesController::class);
-Route::get('guide/{guide}/delete', [\App\Http\Controllers\GuidesController::class, 'destroy'])->name('guide.delete');
+Route::get('guide/{guide}/delete', [GuidesController::class, 'destroy'])->name('guide.delete');
 
-Route::resource('guideStep', App\Http\Controllers\GuideStepsController::class);
+Route::resource('guide_step', App\Http\Controllers\GuideStepsController::class);

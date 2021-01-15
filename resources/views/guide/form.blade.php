@@ -27,21 +27,8 @@
     </div>
     <hr/>
 
-    <div id="addStep">
-        <!--<div class="block">
-            <div class="form-group">
-                <label for="step">Krok 1</label>
-                <input type="text" class="form-control" id="step" name="addstep[0][step]" placeholder="Krok" value="" required>
-            </div>
-            <div class="form-group">
-                <label for="procedure">Postup</label>
-                <textarea class="form-control" name="addstep[0][procedure]" rows="5" placeholder="Postup" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="image_step">Obrázok</label>
-                <input type="file" class="form-control" name="addstep[0][image_step]">
-            </div>
-        </div>-->
+    <div id="addStep" data-repeater-list="addstep">
+
     </div>
 
     <div class="form-group d-inline-flex p-2">
@@ -63,7 +50,7 @@
             '<hr>\n' +
             '      <div class="form-group">\n' +
             '          <label for="step">Krok '+(i + 1)+'</label>\n' +
-            '          <input type="text" class="form-control" id="step" name="addstep['+i+'][step]" placeholder="Krok" value="" required>\n' +
+            '          <input type="text" class="form-control" id="step" name="addstep['+i+'][step]" placeholder="Krok" value="" >\n' +
             '      </div>\n' +
             '      <div class="form-group">\n' +
             '          <label for="procedure">Postup</label>\n' +
