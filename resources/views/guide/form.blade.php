@@ -11,11 +11,11 @@
     @method($method)
     <div class="form-group">
         <label for="title">Názov</label>
-        <input type="text" class="form-control" id="title" name="title" placeholder="Názov" value="{{ old('name', @$model->title) }}" maxlength="255" required>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Názov" value="{{ old('Názov', @$model->title) }}" maxlength="255" required>
     </div>
     <div class="form-group">
         <label for="description">Popis</label>
-        <textarea class="form-control" id="description" name="description" rows="5" placeholder="Popis" required>{{ old('description', @$model->description) }}</textarea>
+        <textarea class="form-control" id="description" name="description" rows="5" placeholder="Popis" required>{{ old('Popis', @$model->description) }}</textarea>
     </div>
     <div class="form-group">
         <label for="image">Obrázok</label>
@@ -28,6 +28,31 @@
     <hr/>
 
     <div id="addStep" data-repeater-list="addstep">
+
+        @foreach($steps as $step)
+            <div class="form-group">
+                <hr>
+                <div class="form-group">
+                    <label for="step">Krok{{ $loop->index + 1 }}</label>
+                    <input type="text" class="form-control" id="step" name="addstep[{{ $loop->index }}][step]" placeholder="Krok" value="{{ old('Krok', @$step->step) }}" maxlength="255" required>
+                </div>
+                <div class="form-group">
+                    <label for="procedure">Postup</label>
+                    <textarea class="form-control" name="addstep[{{ $loop->index }}][procedure]" rows="5" placeholder="Postup" required>{{ old('Postup', @$step->procedure) }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image_step">Obrázok</label>
+                    @if(@$model->image_path != null)
+                        <br>
+                        <img src="{{ url('/guide_steps/'.@$step->image_path) }}" class="img-fluid img-thumbnail img-preview" alt="">
+                    @endif
+                    <input type="file" class="form-control" name="addstep[{{ $loop->index }}][image_step]">
+                </div>
+                <div class="form-group d-inline-flex p-2">
+                    <button type="button" class="justify-content-center btn btn-danger form-control" name="remove">Odstrániť krok</button>
+                </div>
+            </div>
+        @endforeach
 
     </div>
 

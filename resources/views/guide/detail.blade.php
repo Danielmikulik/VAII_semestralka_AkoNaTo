@@ -26,10 +26,9 @@
                 <br>
             @endforeach
 
-            <form method="post">
+            <hr>
                 <a href="{{ route('guide.edit', [$guide]) }}" name="delete" class="btn btn-primary">Upraviť</a>
                 <a href="{{ route('guide.delete', [$guide]) }}" name="delete" class="btn btn-danger">Zmazať</a>
-            </form>
         </section>
     </div>
 @endsection

@@ -77,34 +77,10 @@ class GuidesController extends Controller
         }
         $guide->save();
 
-
         if ($request->has('addstep')) {
-            //return redirect()->route('guide_step.store', [$request]);
             (new GuideStepsController)->store($request);
-            /*foreach ($request->addstep as $key => $value) {
-
-                if ($value['image_step'] != null) {
-
-                    $value['image_step']->store('guide_steps', 'public');
-
-                    $guideStep = new GuideStep([
-                        'step' => $value['step'],
-                        'procedure' => $value['procedure'],
-                        'image_path' => $value['image_step']->hashName(),
-                        'guide_id' => $id,
-                    ]);
-                } else {
-                    $guideStep = new GuideStep([
-                        'step' => $value['step'],
-                        'procedure' => $value['procedure'],
-                        'guide_id' => $id,
-                    ]);
-                }
-                $guideStep->save();
-                $i++;
-            }*/
         }
-        //dd($request->all());
+
         return redirect()->route('guide.index');
     }
 
@@ -116,12 +92,11 @@ class GuidesController extends Controller
      */
     public function show(Guide $guide)
     {
-        //$steps = GuideStep::query()->where('guide_id', '=', $guide['id']);
         $steps = DB::table('guide_steps')
             ->select('*')
             ->where('guide_id', '=', $guide['id'])
             ->get();
-        //dd($steps);
+
         return view('guide.detail', [
             'guide' => $guide,
             'steps' => $steps
@@ -136,10 +111,16 @@ class GuidesController extends Controller
      */
     public function edit(Guide $guide)
     {
+        $steps = DB::table('guide_steps')
+            ->select('*')
+            ->where('guide_id', '=', $guide['id'])
+            ->get();
+
         return view('guide.edit', [
             'action' => route('guide.update', $guide->id),
             'method' => 'put',
-            'model' => $guide
+            'model' => $guide,
+            'steps' => $steps
         ]);
     }
 
