@@ -11,7 +11,7 @@
     @method($method)
     <div class="form-group">
         <label for="title">Názov</label>
-        <input type="text" class="form-control" id="title" name="title" placeholder="Názov" value="{{ old('name', @$model->title) }}" required>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Názov" value="{{ old('name', @$model->title) }}" maxlength="255" required>
     </div>
     <div class="form-group">
         <label for="description">Popis</label>
@@ -50,7 +50,7 @@
             '<hr>\n' +
             '      <div class="form-group">\n' +
             '          <label for="step">Krok '+(i + 1)+'</label>\n' +
-            '          <input type="text" class="form-control" id="step" name="addstep['+i+'][step]" placeholder="Krok" value="" >\n' +
+            '          <input type="text" class="form-control" id="step" name="addstep['+i+'][step]" placeholder="Krok" value="" maxlength="255" required>\n' +
             '      </div>\n' +
             '      <div class="form-group">\n' +
             '          <label for="procedure">Postup</label>\n' +

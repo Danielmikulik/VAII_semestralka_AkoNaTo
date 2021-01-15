@@ -24,10 +24,12 @@
     width: 200px;
     height: 200px;
     margin-bottom: 1em;
+    margin-top: 1em;
 }
 
 .img-detail{
-    max-width: 350px;
+    max-height: 350px;
+    max-width: 650px;
 }
 
 .text-preview {
@@ -44,6 +46,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    margin-top: 1em;
 }
 
 .text-input {

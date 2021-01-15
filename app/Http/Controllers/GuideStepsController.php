@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guide;
 use App\Models\GuideStep;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class GuideStepsController extends Controller
 {
@@ -34,37 +36,28 @@ class GuideStepsController extends Controller
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse|void
      */
-    public function store(Request $request, int $id)
+    public function store(Request $request)
     {
+        $id = Guide::max('id');
+        $i = 0;
         foreach ($request->addstep as $key => $value) {
-
-            $value->validate([
-                'step' => 'required',
-                'procedure' => 'required'
-            ]);
-
-            if ($value->hasFile('image')) {
-                $value->validate([
-                    'image' => 'mimes:jpeg,jpg,png|max:5000'
-                ]);
-
-                $value->file('image')->store('guide_steps', 'public');
-
+            if (Arr::has($value, 'image_step')) {
+                $value['image_step']->store('guide_steps', 'public');
                 $guideStep = new GuideStep([
-                    'step' => $value->get('step'),
-                    'procedure' => $value->get('procedure'),
-                    'image_path' => $value->file('image')->hashName(),
-                    'user_id' => $id,
+                    'step' => $value['step'],
+                    'procedure' => $value['procedure'],
+                    'image_path' => $value['image_step']->hashName(),
+                    'guide_id' => $id,
                 ]);
             } else {
                 $guideStep = new GuideStep([
-                    'step' => $value->get('step'),
-                    'procedure' => $value->get('procedure'),
+                    'step' => $value['step'],
+                    'procedure' => $value['procedure'],
                     'guide_id' => $id,
                 ]);
             }
-            GuideStep::create($value);
             $guideStep->save();
+            $i++;
         }
         return redirect()->route('guide.index');
     }
