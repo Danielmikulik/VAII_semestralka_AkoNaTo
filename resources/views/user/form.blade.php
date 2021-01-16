@@ -23,7 +23,8 @@
         <label for="password">Confirm password</label>
         <input type="password" class="form-control" id="password" name="password_confirmation" placeholder="Confirm password">
     </div>
-    <div class="form-group">
+    <div class="form-group d-inline-flex">
         <input type="submit" class="btn btn-primary form-control">
+        <a href="{{ route('user.delete', [$model]) }}" name="delete" class="btn btn-danger offset-1">Zmazať</a>
     </div>
 </form>

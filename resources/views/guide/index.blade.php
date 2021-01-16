@@ -5,18 +5,24 @@
         <section class="col-12 container-fluid content-section">
             <div class="list-group">
 
-                <div class="card-body">
-                    <div class="mb-3">
-                        <a href="{{ route('guide.create') }}" class="btn btn-sm btn-success" role="button">Pridať návod</a>
+                @auth
+                    @if(empty($author_id) || $author_id == \Illuminate\Support\Facades\Auth::id())
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <a href="{{ route('guide.create') }}" class="btn btn-sm btn-success" role="button">Pridať návod</a>
+                        </div>
                     </div>
-                </div>
+                    @endif
+                @endauth
 
                 @foreach($guides as $guide)
                     <a href="{{ route('guide.show', [$guide['id']]) }}" class="list-group-item list-group-item-action flex-column align-items-start custom-card">
                         <div class="row no-gutters">
-                            <div class="col-auto">
-                                <img src="{{ url('/guides/'.$guide['image_path']) }}" class="img-fluid img-thumbnail img-preview" alt="">
-                            </div>
+                            @if($guide['image_path'] != null)
+                                <div class="col-auto">
+                                    <img src="{{ url('/guides/'.$guide['image_path']) }}" class="img-fluid img-thumbnail img-preview" alt="">
+                                </div>
+                            @endif
                             <div class="col card-block px-2">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1 title-preview">{{ $guide['title'] }}</h5>

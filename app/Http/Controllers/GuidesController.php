@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guide;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,22 @@ class GuidesController extends Controller
 
         return view('guide.index', [
             'guides' => $guides
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource by user_id.
+     *
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     */
+    public function showAuthorsGuides(int $id)
+    {
+        $guides = Guide::query()->where('user_id', '=', $id)->paginate(5);
+
+        return view('guide.index', [
+            'guides' => $guides,
+            'author_id' => $id
         ]);
     }
 
@@ -94,10 +111,15 @@ class GuidesController extends Controller
     public function show(Guide $guide)
     {
         $steps = $this->getMySteps($guide->id);
+        $author = User::query()->find($guide->user_id);
+        $authorName = empty($author) ? '' : $author->name;
 
         return view('guide.detail', [
             'guide' => $guide,
-            'steps' => $steps
+            'steps' => $steps,
+            'author_id' => $guide->user_id,
+            'author_name' => $authorName,
+            'user_role' => Auth::user()->role
         ]);
     }
 

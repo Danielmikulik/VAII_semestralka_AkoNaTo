@@ -6,12 +6,13 @@ namespace App\Http\Controllers;
 use Aginev\Datagrid\Datagrid;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        //$this->authorizeResource(User::class, 'user');
+        $this->authorizeResource(User::class, 'user');
     }
 
     /**
@@ -28,8 +29,8 @@ class UserController extends Controller
             ->setColumn('email', 'Email address')
             ->setActionColumn([
                 'wrapper' => function($value, $row) {
-                return '<a href="' . route('user.edit', [$row->id]) . '" title="Edit" class="btn btn-sm btn-primary">Edit</a>
-                        <a href="' . route('user.delete', [$row->id]) . '" title="Delete" data-method="DELETE"
+                return '<a href="' . route('user.edit', [$row->id]) . '" title="Upraviť" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="' . route('user.delete', [$row->id]) . '" title="Zmazať" data-method="DELETE"
                             class="btn btn-sm btn-danger" data-confirm="Are you sure">Delete</a>';
                 }
             ]);
@@ -112,7 +113,10 @@ class UserController extends Controller
             'password' => 'required|min:6|confirmed'
         ]);
         $user->update($request->all());
-        return redirect()->route('user.index');
+        if (Auth::user()->role == 'admin') {
+            return redirect()->route('user.index');
+        }
+        return redirect()->route('guide.index');
     }
 
     /**

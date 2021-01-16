@@ -27,9 +27,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('user', UserController::class);
     Route::get('user/{user}/delete', [UserController::class, 'destroy'])->name('user.delete');
+    Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+
+    Route::get('showAuthorsGuides/{user}', [GuidesController::class, 'showAuthorsGuides'])->name('guide.showAuthorsGuides');
+    Route::get('guide/{guide}/delete', [GuidesController::class, 'destroy'])->name('guide.delete');
 });
 
 Route::resource('guide', App\Http\Controllers\GuidesController::class);
-Route::get('guide/{guide}/delete', [GuidesController::class, 'destroy'])->name('guide.delete');
 
 Route::resource('guide_step', App\Http\Controllers\GuideStepsController::class);

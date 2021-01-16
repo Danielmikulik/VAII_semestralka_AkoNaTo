@@ -33,10 +33,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        @can('view', [\App\Models\User::class, \Illuminate\Support\Facades\Auth::user()])
+                            <a class="nav-link" href="{{ route('user.index') }}"> {{ __('Používatelia') }} </a>
+                        @endcan
+                            <a class="nav-link" href="{{ route('guide.index') }}"> {{ __('Všetky návody') }} </a>
                         @auth
-                            <a class="nav-link" href="{{ route('user.index') }}"> {{ __('Users') }} </a>
+                            <a class="nav-link" href="{{ route('guide.showAuthorsGuides', [\Illuminate\Support\Facades\Auth::id()]) }}"> {{ __('Moje návody') }} </a>
                         @endauth
-                            <a class="nav-link" href="{{ route('guide.index') }}"> {{ __('Návody') }} </a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -61,6 +64,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('user.edit', \Illuminate\Support\Facades\Auth::id()) }}">
+                                        {{ __('Editovať účet') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
