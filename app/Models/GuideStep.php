@@ -18,6 +18,7 @@ class GuideStep extends Model
         'step',
         'procedure',
         'image_path',
-        'guide_id'
+        'guide_id',
+        'order'
     ];
 }

@@ -78,7 +78,8 @@ class GuidesController extends Controller
         $guide->save();
 
         if ($request->has('addstep')) {
-            (new GuideStepsController)->store($request);
+            $id = Guide::max('id');
+            (new GuideStepsController)->store($request, $id);
         }
 
         return redirect()->route('guide.index');
@@ -92,10 +93,7 @@ class GuidesController extends Controller
      */
     public function show(Guide $guide)
     {
-        $steps = DB::table('guide_steps')
-            ->select('*')
-            ->where('guide_id', '=', $guide['id'])
-            ->get();
+        $steps = $this->getMySteps($guide->id);
 
         return view('guide.detail', [
             'guide' => $guide,
@@ -111,10 +109,7 @@ class GuidesController extends Controller
      */
     public function edit(Guide $guide)
     {
-        $steps = DB::table('guide_steps')
-            ->select('*')
-            ->where('guide_id', '=', $guide['id'])
-            ->get();
+        $steps = $this->getMySteps($guide->id);
 
         return view('guide.edit', [
             'action' => route('guide.update', $guide->id),
@@ -138,6 +133,12 @@ class GuidesController extends Controller
             'description' => 'required'
         ]);
 
+        $request->validate([
+            'addstep.*.step' => 'required|max:255',
+            'addstep.*.procedure' => 'required',
+            'addstep.*.image_step' => 'mimes:jpeg,jpg,png|max:5000'
+        ]);
+
         if ($request->hasFile('image')) {
             $request->validate([
                 'image' => 'mimes:jpeg,jpg,png|max:5000'
@@ -147,6 +148,11 @@ class GuidesController extends Controller
             Guide::query()->find($guide->id)->update(array('image_path' => $request->file('image')->hashName()));
         }
         $guide->update($request->all());
+
+        if ($request->has('addstep')) {
+            (new GuideStepsController)->update($request, $guide->id);
+        }
+
         return redirect()->route('guide.show', [$guide->id]);
     }
 
@@ -160,5 +166,15 @@ class GuidesController extends Controller
     {
         $guide->delete();
         return redirect()->route('guide.index');
+    }
+
+    private function getMySteps(int $id)
+    {
+        $steps = DB::table('guide_steps')
+            ->select('*')
+            ->where('guide_id', '=', $id)
+            ->orderBy('order', 'asc')
+            ->get();
+        return $steps;
     }
 }
