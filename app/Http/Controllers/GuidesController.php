@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedMethodInspection */
 
 namespace App\Http\Controllers;
 
@@ -13,11 +13,18 @@ class GuidesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $guides = Guide::paginate(5);
+
+        if ($request->ajax()){
+            $view = view('guide.data', compact('guides'))->render();
+            return response()->json(['html' => $view]);
+        }
+        //return view('guide.index', compact('guides'));
 
         return view('guide.index', [
             'guides' => $guides
@@ -27,12 +34,18 @@ class GuidesController extends Controller
     /**
      * Display a listing of the resource by user_id.
      *
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function showAuthorsGuides(int $id)
+    public function showAuthorsGuides(Request $request, int $id)
     {
         $guides = Guide::query()->where('user_id', '=', $id)->paginate(5);
+
+        if ($request->ajax()){
+            $view = view('guide.data', compact('guides'))->render();
+            return response()->json(['html' => $view]);
+        }
 
         return view('guide.index', [
             'guides' => $guides,
@@ -114,6 +127,7 @@ class GuidesController extends Controller
         $author = User::query()->find($guide->user_id);
         $authorName = empty($author) ? '' : $author->name;
 
+        /** @noinspection PhpUndefinedFieldInspection */
         return view('guide.detail', [
             'guide' => $guide,
             'steps' => $steps,

@@ -1,9 +1,9 @@
-<?php
+<?php /** @noinspection PhpUndefinedFieldInspection */
+
+/** @noinspection PhpUndefinedMethodInspection */
 
 namespace App\Http\Controllers;
 
-
-use Aginev\Datagrid\Datagrid;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,23 +20,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $users = User::paginate(25);
-
-        $grid = new Datagrid($users, $request->get('f', []));
-        $grid->setColumn('name', 'Full name')
-            ->setColumn('email', 'Email address')
-            ->setActionColumn([
-                'wrapper' => function($value, $row) {
-                return '<a href="' . route('user.edit', [$row->id]) . '" title="Upraviť" class="btn btn-sm btn-primary">Edit</a>
-                        <a href="' . route('user.delete', [$row->id]) . '" title="Zmazať" data-method="DELETE"
-                            class="btn btn-sm btn-danger" data-confirm="Are you sure">Delete</a>';
-                }
-            ]);
+        $users = User::paginate(10);
 
         return view('user.index', [
-            'grid' => $grid
+            'users' => $users
         ]);
     }
 
@@ -123,12 +112,13 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param User $user
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('user.index');
+        return response()->json(['success' => 'Používateľ bol zmazaný']);
+        //return redirect()->route('user.index');
     }
 }

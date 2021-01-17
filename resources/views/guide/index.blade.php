@@ -15,32 +15,56 @@
                     @endif
                 @endauth
 
-                @foreach($guides as $guide)
-                    <a href="{{ route('guide.show', [$guide['id']]) }}" class="list-group-item list-group-item-action flex-column align-items-start custom-card">
-                        <div class="row no-gutters">
-                            @if($guide['image_path'] != null)
-                                <div class="col-auto">
-                                    <img src="{{ url('/guides/'.$guide['image_path']) }}" class="img-fluid img-thumbnail img-preview" alt="">
-                                </div>
-                            @endif
-                            <div class="col card-block px-2">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1 title-preview">{{ $guide['title'] }}</h5>
-                                </div>
-                                <br>
-                                <p class="mb-1 text-preview">{{ $guide['description'] }}</p>
-                                <div class="date">
-                                    <small class="date">{{ $guide['created_at'] }}</small>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-                <br>
-                <div class="d-flex justify-content-center">
-                    {!! $guides->links() !!}
+                <div class="col-md-12" id="data">
+                    @include('guide.data')
                 </div>
+                <br>
+
+                <div class="d-flex justify-content-center">
+                    @for($i = 0; $i < 3; $i++)
+                    <p class="ajax-load text-center spinner-grow" role="status" style="display: none"></p>
+                    @endfor
+                </div>
+                <br>
+                <br>
+                <br>
+
             </div>
         </section>
     </div>
+
+    <script>
+        var allLoaded = false;
+        function loadMoreGuides(page)
+        {
+            $.ajax({
+                url:'?page=' + page,
+                type: 'get',
+                beforeSend: function ()
+                {
+                    $(".ajax-load").show();
+                }
+            })
+                .done(function (data){
+                    if (data.html == ""){
+                        allLoaded = true;
+                        //$('.ajax-load').removeClass('.spinner-grow');
+                        //$('.ajax-load').html('Žiadne ďalšie návody neboli nájdené.')
+                    }
+                    $('.ajax-load').hide();
+                    $("#data").append(data.html);
+                })
+                .fail(function (jqXHR, ajaxOption, thrownError){
+                    alert("Server neodpovedá...");
+                });
+        }
+
+        var page = 1;
+        $(window).scroll(function(){
+            if (!allLoaded && $(window).scrollTop() + $(window).height() >= $(document).height() - 1){
+                page++;
+                loadMoreGuides(page);
+            }
+        });
+    </script>
 @endsection

@@ -4,8 +4,6 @@
     @endforeach
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
 <form method="post" action="{{ $action }}" enctype="multipart/form-data">
     @csrf
     @method($method)
@@ -35,6 +33,7 @@
                     <hr>
                     @endif
                     <div>
+                        <label for="id"></label>
                         <input type="text" class="text-hide" id="id" name="addstep[{{ $loop->index }}][id]" value="{{ @$step->id }}">
                     </div>
                     <div class="form-group">
@@ -43,7 +42,7 @@
                     </div>
                     <div class="form-group">
                         <label for="procedure">Postup</label>
-                        <textarea class="form-control" name="addstep[{{ $loop->index }}][procedure]" rows="5" placeholder="Postup" required>{{ old('Postup', @$step->procedure) }}</textarea>
+                        <textarea class="form-control" id="procedure" name="addstep[{{ $loop->index }}][procedure]" rows="5" placeholder="Postup" required>{{ old('Postup', @$step->procedure) }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="image_step">Obrázok</label>

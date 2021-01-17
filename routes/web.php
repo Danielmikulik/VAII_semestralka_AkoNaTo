@@ -26,7 +26,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('user', UserController::class);
-    Route::get('user/{user}/delete', [UserController::class, 'destroy'])->name('user.delete');
+    Route::delete('user/{user}/delete', [UserController::class, 'destroy'])->name('user.delete');
     Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
 
     Route::get('showAuthorsGuides/{user}', [GuidesController::class, 'showAuthorsGuides'])->name('guide.showAuthorsGuides');
